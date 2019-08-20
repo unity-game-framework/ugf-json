@@ -7,7 +7,7 @@ namespace UGF.Json.Runtime
     {
         public static string ToCompact(string text)
         {
-            var result = new StringBuilder();
+            var result = new StringBuilder(text.Length);
             var reader = new JsonTextReader(text);
 
             ToCompact(result, ref reader);
@@ -54,7 +54,7 @@ namespace UGF.Json.Runtime
 
         public static string ToReadable(string text, int indent = 4)
         {
-            var result = new StringBuilder();
+            var result = new StringBuilder(text.Length);
             var reader = new JsonTextReader(text);
 
             ToReadable(result, ref reader, indent);
@@ -120,7 +120,7 @@ namespace UGF.Json.Runtime
 
         public static string Escape(string text)
         {
-            var result = new StringBuilder();
+            var result = new StringBuilder(text.Length);
             var reader = new JsonTextReader(text);
 
             Escape(result, ref reader);
@@ -188,7 +188,7 @@ namespace UGF.Json.Runtime
 
         public static string Unescape(string text)
         {
-            var result = new StringBuilder();
+            var result = new StringBuilder(text.Length);
             var reader = new JsonTextReader(text);
 
             Unescape(result, ref reader);
