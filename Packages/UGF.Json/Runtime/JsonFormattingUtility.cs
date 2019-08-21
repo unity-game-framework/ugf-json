@@ -7,6 +7,8 @@ namespace UGF.Json.Runtime
     {
         public static string ToCompact(string text)
         {
+            if (text == null) throw new ArgumentNullException(nameof(text));
+
             var result = new StringBuilder(text.Length);
             var reader = new JsonTextReader(text);
 
@@ -17,6 +19,8 @@ namespace UGF.Json.Runtime
 
         public static void ToCompact(StringBuilder result, ref JsonTextReader reader)
         {
+            if (result == null) throw new ArgumentNullException(nameof(result));
+
             reader.SkipWhiteSpaces();
 
             while (reader.CanRead())
@@ -25,7 +29,7 @@ namespace UGF.Json.Runtime
 
                 switch (ch)
                 {
-                    case '\"':
+                    case '"':
                     {
                         result.Append('"');
                         reader.ReadUntil(result, '"');
@@ -54,6 +58,9 @@ namespace UGF.Json.Runtime
 
         public static string ToReadable(string text, int indent = 4)
         {
+            if (text == null) throw new ArgumentNullException(nameof(text));
+            if (indent >= 0) throw new ArgumentException("The indent count must be greater or equal to zero.", nameof(indent));
+
             var result = new StringBuilder(text.Length);
             var reader = new JsonTextReader(text);
 
@@ -64,6 +71,9 @@ namespace UGF.Json.Runtime
 
         public static void ToReadable(StringBuilder result, ref JsonTextReader reader, int indent = 4)
         {
+            if (result == null) throw new ArgumentNullException(nameof(result));
+            if (indent >= 0) throw new ArgumentException("The indent count must be greater or equal to zero.", nameof(indent));
+
             int depth = 0;
 
             while (reader.CanRead())
@@ -72,7 +82,7 @@ namespace UGF.Json.Runtime
 
                 switch (ch)
                 {
-                    case '\"':
+                    case '"':
                     {
                         result.Append('"');
                         reader.ReadUntil(result, '"');
@@ -118,8 +128,15 @@ namespace UGF.Json.Runtime
             }
         }
 
+        public static void ClearComments(StringBuilder result, ref JsonTextReader reader)
+        {
+            if (result == null) throw new ArgumentNullException(nameof(result));
+        }
+
         public static string Escape(string text)
         {
+            if (text == null) throw new ArgumentNullException(nameof(text));
+
             var result = new StringBuilder(text.Length);
             var reader = new JsonTextReader(text);
 
@@ -130,6 +147,8 @@ namespace UGF.Json.Runtime
 
         public static void Escape(StringBuilder result, ref JsonTextReader reader)
         {
+            if (result == null) throw new ArgumentNullException(nameof(result));
+
             while (reader.CanRead())
             {
                 char ch = reader.Read();
@@ -188,6 +207,8 @@ namespace UGF.Json.Runtime
 
         public static string Unescape(string text)
         {
+            if (text == null) throw new ArgumentNullException(nameof(text));
+
             var result = new StringBuilder(text.Length);
             var reader = new JsonTextReader(text);
 
@@ -198,6 +219,8 @@ namespace UGF.Json.Runtime
 
         public static void Unescape(StringBuilder result, ref JsonTextReader reader)
         {
+            if (result == null) throw new ArgumentNullException(nameof(result));
+
             while (reader.CanRead())
             {
                 char ch = reader.Read();
