@@ -52,8 +52,39 @@ namespace UGF.Json.Runtime
             return m_text[m_position++];
         }
 
+        public string Read(int start, int end)
+        {
+            if (end < start) throw new ArgumentException("The specified end must be greater than start.", nameof(end));
+
+            return Text.Substring(start, end - start);
+        }
+
+        public char ReadUntil(char target)
+        {
+            while (m_position < m_length && m_text[m_position] != target)
+            {
+                m_position++;
+            }
+
+            return m_text[m_position];
+        }
+
+        public char ReadUntil(Predicate<char> predicate)
+        {
+            if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+
+            while (m_position < m_length && predicate(m_text[m_position]))
+            {
+                m_position++;
+            }
+
+            return m_text[m_position];
+        }
+
         public void ReadUntil(StringBuilder result, char ch)
         {
+            if (result == null) throw new ArgumentNullException(nameof(result));
+
             while (m_position < m_length && m_text[m_position] != ch)
             {
                 result.Append(m_text[m_position++]);
@@ -62,6 +93,9 @@ namespace UGF.Json.Runtime
 
         public void ReadUntil(StringBuilder result, Predicate<char> predicate)
         {
+            if (result == null) throw new ArgumentNullException(nameof(result));
+            if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+
             while (m_position < m_length && predicate(m_text[m_position]))
             {
                 result.Append(m_text[m_position++]);
@@ -74,6 +108,11 @@ namespace UGF.Json.Runtime
             {
                 m_position++;
             }
+        }
+
+        public override string ToString()
+        {
+            return m_text[m_position].ToString();
         }
     }
 }

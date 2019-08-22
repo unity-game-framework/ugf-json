@@ -1,6 +1,10 @@
 {
     "_id": "5b267c48e0e3637be6b90797",
     "index": 0,
+    "number1": 0,
+    "number2": -0,
+    "number3": 0.0,
+    "number4": 0.0e-1,
     "guid": "e4f2e36c-0a4f-4a29-b235-3f93feb82bcc",
     "isActive": true,
     "balance": "$2,411.91",
