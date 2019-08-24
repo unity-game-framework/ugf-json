@@ -6,15 +6,27 @@ namespace UGF.Json.Runtime.Tests
 {
     public class TestJsonReader
     {
-        [Test]
-        public void Test()
+        private string m_compact;
+        private string m_readable;
+
+        [SetUp]
+        public void Setup()
         {
-            string text = Resources.Load<TextAsset>("readable").text;
-            var reader = new JsonReader(text);
+            m_compact = Resources.Load<TextAsset>("compact").text;
+            m_readable = Resources.Load<TextAsset>("readable").text;
+        }
 
-            IJsonValue value = reader.Read();
+        [Test]
+        public void Read()
+        {
+            var reader0 = new JsonReader(m_compact);
+            var reader1 = new JsonReader(m_readable);
 
-            Assert.NotNull(value);
+            IJsonValue value0 = reader0.Read();
+            IJsonValue value1 = reader1.Read();
+
+            Assert.NotNull(value0);
+            Assert.NotNull(value1);
         }
     }
 }

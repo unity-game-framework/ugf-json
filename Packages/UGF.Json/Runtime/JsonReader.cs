@@ -1,24 +1,27 @@
+using System;
+using System.IO;
+using System.Text;
 using UGF.Json.Runtime.Values;
 
 namespace UGF.Json.Runtime
 {
-    public struct JsonReader
+    public class JsonReader
     {
-        private JsonTextReader m_reader;
+        public TextReader Reader { get; }
 
         public JsonReader(string text)
         {
-            m_reader = new JsonTextReader(text);
+            Reader = new StringReader(text);
         }
 
-        public JsonReader(string text, int position, int length)
+        public JsonReader(TextReader reader)
         {
-            m_reader = new JsonTextReader(text, position, length);
+            Reader = reader;
         }
 
         public IJsonValue Read()
         {
-            char ch = m_reader.Peek();
+            char ch = Peek();
 
             switch (ch)
             {
@@ -41,7 +44,7 @@ namespace UGF.Json.Runtime
                 case '9': return ReadNumber();
             }
 
-            throw new JsonUnexpectedSymbolException("'{', '[', '\"', 'n', 't', 'f', '-' or '0-9' digit", ch, m_reader.Position);
+            throw new JsonUnexpectedSymbolException("'{', '[', '\"', 'n', 't', 'f', '-' or '0-9' digit", ch);
         }
 
         private JsonObject ReadObject()
@@ -50,29 +53,31 @@ namespace UGF.Json.Runtime
 
             ReadAndValidate('{');
 
-            m_reader.SkipWhiteSpaces();
+            JsonFormatUtility.SkipWhiteSpaces(Reader);
 
-            if (m_reader.Peek() == '}')
+            if (Peek() == '}')
             {
-                m_reader.Read();
+                ReadNext();
             }
             else
             {
                 while (true)
                 {
-                    m_reader.SkipWhiteSpaces();
+                    JsonFormatUtility.SkipWhiteSpaces(Reader);
 
                     string key = ReadString().Raw;
 
-                    m_reader.SkipWhiteSpaces();
-                    m_reader.Read();
-                    m_reader.SkipWhiteSpaces();
+                    JsonFormatUtility.SkipWhiteSpaces(Reader);
+
+                    ReadNext();
+
+                    JsonFormatUtility.SkipWhiteSpaces(Reader);
 
                     value.Add(key, Read());
 
-                    m_reader.SkipWhiteSpaces();
+                    JsonFormatUtility.SkipWhiteSpaces(Reader);
 
-                    if (m_reader.Read() == '}')
+                    if (ReadNext() == '}')
                     {
                         break;
                     }
@@ -88,21 +93,21 @@ namespace UGF.Json.Runtime
 
             ReadAndValidate('[');
 
-            if (m_reader.Peek() == ']')
+            if (Peek() == ']')
             {
-                m_reader.Read();
+                ReadNext();
             }
             else
             {
                 while (true)
                 {
-                    m_reader.SkipWhiteSpaces();
+                    JsonFormatUtility.SkipWhiteSpaces(Reader);
 
                     value.Add(Read());
 
-                    m_reader.SkipWhiteSpaces();
+                    JsonFormatUtility.SkipWhiteSpaces(Reader);
 
-                    if (m_reader.Read() == ']')
+                    if (ReadNext() == ']')
                     {
                         break;
                     }
@@ -145,104 +150,155 @@ namespace UGF.Json.Runtime
 
         private JsonValue ReadNumber()
         {
-            int start = m_reader.Position;
-            char ch = m_reader.Read();
+            var builder = new StringBuilder();
+
+            char ch = Peek();
+
+            if (!JsonFormatUtility.IsDigit(ch) && ch != '-')
+            {
+                throw new JsonUnexpectedSymbolException("'0-9' digit or '-' sign at the beginning of the number", ch);
+            }
 
             if (ch == '-')
             {
-                ch = m_reader.Read();
+                builder.Append(ReadNext());
+                ch = Peek();
 
                 if (!JsonFormatUtility.IsDigit(ch))
                 {
-                    throw new JsonUnexpectedSymbolException("'0-9 digit after '-' sign at the beginning of the number", ch, m_reader.Position);
+                    throw new JsonUnexpectedSymbolException("'0-9' digit after '-' sign at the beginning of the number", ch);
                 }
+
+                builder.Append(ReadNext());
+                ch = Peek();
             }
 
             while (JsonFormatUtility.IsDigit(ch))
             {
-                ch = m_reader.Read();
+                builder.Append(ReadNext());
+                ch = Peek();
             }
 
             if (ch == '.')
             {
-                ch = m_reader.Read();
+                builder.Append(ReadNext());
+                ch = Peek();
 
                 if (!JsonFormatUtility.IsDigit(ch))
                 {
-                    throw new JsonUnexpectedSymbolException("'0-9' digit after '.' decimal separator", ch, m_reader.Position);
+                    throw new JsonUnexpectedSymbolException("'0-9' digit after '.' decimal separator", ch);
                 }
+
+                builder.Append(ReadNext());
+                ch = Peek();
 
                 while (JsonFormatUtility.IsDigit(ch))
                 {
-                    ch = m_reader.Read();
+                    builder.Append(ReadNext());
+                    ch = Peek();
                 }
             }
 
             if (ch == 'e' || ch == 'E')
             {
-                ch = m_reader.Read();
+                builder.Append(ReadNext());
+                ch = Peek();
 
-                if (ch != '-' || ch != '+')
+                if (ch != '-' && ch != '+')
                 {
-                    throw new JsonUnexpectedSymbolException("'-' or '+' after exponent symbol", ch, m_reader.Position);
+                    throw new JsonUnexpectedSymbolException("'-' or '+' after exponent symbol", ch);
                 }
 
-                ch = m_reader.Read();
+                builder.Append(ReadNext());
+                ch = Peek();
 
                 if (!JsonFormatUtility.IsDigit(ch))
                 {
-                    throw new JsonUnexpectedSymbolException("'0-9' digit after exponent sign", ch, m_reader.Position);
+                    throw new JsonUnexpectedSymbolException("'0-9' digit after exponent sign", ch);
                 }
+
+                builder.Append(ReadNext());
+                ch = Peek();
 
                 while (JsonFormatUtility.IsDigit(ch))
                 {
-                    ch = m_reader.Read();
+                    builder.Append(ReadNext());
+                    ch = Peek();
                 }
             }
 
-            int end = m_reader.Position - 1;
-            string raw = m_reader.Text.Substring(start, end);
-
-            return new JsonValue(JsonValueType.Number, raw);
+            return new JsonValue(JsonValueType.Number, builder.ToString());
         }
 
         private JsonValue ReadString()
         {
+            var builder = new StringBuilder();
+
             ReadAndValidate('"');
 
-            int start = m_reader.Position;
-
-            while (m_reader.CanRead())
+            while (CanRead())
             {
-                char ch = m_reader.Read();
+                char ch = ReadNext();
 
                 switch (ch)
                 {
                     case '\\':
                     {
-                        m_reader.Read();
+                        builder.Append(ch);
+                        builder.Append(ReadNext());
                         break;
                     }
                     case '"':
                     {
-                        int end = m_reader.Position - 1;
-                        string raw = m_reader.Text.Substring(start, end);
-
-                        return new JsonValue(JsonValueType.String, raw);
+                        return new JsonValue(JsonValueType.String, builder.ToString());
+                    }
+                    default:
+                    {
+                        builder.Append(ch);
+                        break;
                     }
                 }
             }
 
-            throw new JsonUnexpectedSymbolException("'\"' at the end of the string", m_reader.Peek(), m_reader.Position);
+            throw new JsonUnexpectedSymbolException("'\"' at the end of the string", (char)Reader.Peek());
+        }
+
+        private bool CanRead()
+        {
+            CheckStreamEnd();
+
+            return true;
+        }
+
+        private char Peek()
+        {
+            CheckStreamEnd();
+
+            return (char)Reader.Peek();
+        }
+
+        private char ReadNext()
+        {
+            CheckStreamEnd();
+
+            return (char)Reader.Read();
         }
 
         private void ReadAndValidate(char expected)
         {
-            char ch = m_reader.Read();
+            char ch = ReadNext();
 
             if (ch != expected)
             {
-                throw new JsonUnexpectedSymbolException(expected, m_reader.Peek(), m_reader.Position);
+                throw new JsonUnexpectedSymbolException(expected, (char)Reader.Peek());
+            }
+        }
+
+        private void CheckStreamEnd()
+        {
+            if (Reader.Peek() == -1)
+            {
+                throw new InvalidOperationException("Reader reach end of the stream.");
             }
         }
     }

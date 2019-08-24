@@ -64,20 +64,30 @@ namespace UGF.Json.Runtime.Tests
         [Test]
         public void SkipWhiteSpaces()
         {
-            string text = "0    1    2";
+            string text = "0    12    3";
             var reader = new StringReader(text);
 
-            Assert.AreEqual('0', (char)reader.Read());
+            Assert.AreEqual('0', (char)reader.Peek());
 
             JsonFormatUtility.SkipWhiteSpaces(reader);
 
-            Assert.AreEqual('1', (char)reader.Read());
+            Assert.AreEqual('0', (char)reader.Peek());
 
+            reader.Read();
             JsonFormatUtility.SkipWhiteSpaces(reader);
 
-            Assert.AreEqual('2', (char)reader.Read());
+            Assert.AreEqual('1', (char)reader.Peek());
 
+            reader.Read();
+
+            Assert.AreEqual('2', (char)reader.Peek());
+
+            reader.Read();
             JsonFormatUtility.SkipWhiteSpaces(reader);
+
+            Assert.AreEqual('3', (char)reader.Peek());
+
+            reader.Read();
 
             Assert.AreEqual(-1, reader.Peek());
         }
