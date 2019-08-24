@@ -11,12 +11,14 @@ namespace UGF.Json.Runtime
 
         public JsonReader(string text)
         {
+            if (text == null) throw new ArgumentNullException(nameof(text));
+
             Reader = new StringReader(text);
         }
 
         public JsonReader(TextReader reader)
         {
-            Reader = reader;
+            Reader = reader ?? throw new ArgumentNullException(nameof(reader));
         }
 
         public IJsonValue Read()
@@ -134,7 +136,7 @@ namespace UGF.Json.Runtime
             ReadAndValidate('u');
             ReadAndValidate('e');
 
-            return new JsonValue(JsonValueType.Boolean, bool.TrueString);
+            return new JsonValue(JsonValueType.Boolean, "true");
         }
 
         private JsonValue ReadFalse()
@@ -145,7 +147,7 @@ namespace UGF.Json.Runtime
             ReadAndValidate('s');
             ReadAndValidate('e');
 
-            return new JsonValue(JsonValueType.Boolean, bool.FalseString);
+            return new JsonValue(JsonValueType.Boolean, "false");
         }
 
         private JsonValue ReadNumber()
@@ -250,7 +252,10 @@ namespace UGF.Json.Runtime
                     }
                     case '"':
                     {
-                        return new JsonValue(JsonValueType.String, builder.ToString());
+                        string raw = builder.ToString();
+                        string unescaped = JsonFormatUtility.Unescape(raw);
+
+                        return new JsonValue(JsonValueType.String, unescaped);
                     }
                     default:
                     {

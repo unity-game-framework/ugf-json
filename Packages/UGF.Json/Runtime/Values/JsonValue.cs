@@ -12,5 +12,10 @@ namespace UGF.Json.Runtime.Values
             Type = type;
             Raw = raw ?? throw new ArgumentNullException(nameof(raw));
         }
+
+        public override string ToString()
+        {
+            return Raw;
+        }
     }
 }
