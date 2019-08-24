@@ -1,4 +1,3 @@
-using System;
 using UGF.Json.Runtime.Values;
 
 namespace UGF.Json.Runtime
@@ -153,24 +152,30 @@ namespace UGF.Json.Runtime
             {
                 ch = m_reader.Read();
 
-                if (!IsDigit(ch))
+                if (!JsonFormatUtility.IsDigit(ch))
                 {
                     throw new JsonUnexpectedSymbolException("'0-9 digit after '-' sign at the beginning of the number", ch, m_reader.Position);
                 }
             }
 
-            ch = m_reader.ReadUntil(c => IsDigit(c));
+            while (JsonFormatUtility.IsDigit(ch))
+            {
+                ch = m_reader.Read();
+            }
 
             if (ch == '.')
             {
                 ch = m_reader.Read();
 
-                if (!IsDigit(ch))
+                if (!JsonFormatUtility.IsDigit(ch))
                 {
                     throw new JsonUnexpectedSymbolException("'0-9' digit after '.' decimal separator", ch, m_reader.Position);
                 }
 
-                ch = m_reader.ReadUntil(c => IsDigit(c));
+                while (JsonFormatUtility.IsDigit(ch))
+                {
+                    ch = m_reader.Read();
+                }
             }
 
             if (ch == 'e' || ch == 'E')
@@ -184,16 +189,19 @@ namespace UGF.Json.Runtime
 
                 ch = m_reader.Read();
 
-                if (!IsDigit(ch))
+                if (!JsonFormatUtility.IsDigit(ch))
                 {
                     throw new JsonUnexpectedSymbolException("'0-9' digit after exponent sign", ch, m_reader.Position);
                 }
 
-                m_reader.ReadUntil(c => IsDigit(c));
+                while (JsonFormatUtility.IsDigit(ch))
+                {
+                    ch = m_reader.Read();
+                }
             }
 
             int end = m_reader.Position - 1;
-            string raw = m_reader.Read(start, end);
+            string raw = m_reader.Text.Substring(start, end);
 
             return new JsonValue(JsonValueType.Number, raw);
         }
@@ -218,7 +226,7 @@ namespace UGF.Json.Runtime
                     case '"':
                     {
                         int end = m_reader.Position - 1;
-                        string raw = m_reader.Read(start, end);
+                        string raw = m_reader.Text.Substring(start, end);
 
                         return new JsonValue(JsonValueType.String, raw);
                     }
@@ -236,25 +244,6 @@ namespace UGF.Json.Runtime
             {
                 throw new JsonUnexpectedSymbolException(expected, m_reader.Peek(), m_reader.Position);
             }
-        }
-
-        private static bool IsDigit(char ch)
-        {
-            switch (ch)
-            {
-                case '0':
-                case '1':
-                case '2':
-                case '3':
-                case '4':
-                case '5':
-                case '6':
-                case '7':
-                case '8':
-                case '9': return true;
-            }
-
-            return false;
         }
     }
 }
