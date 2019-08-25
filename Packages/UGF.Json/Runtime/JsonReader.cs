@@ -5,10 +5,23 @@ using UGF.Json.Runtime.Values;
 
 namespace UGF.Json.Runtime
 {
+    /// <summary>
+    /// Represents reader to parse Json text to structured data.
+    /// <para>
+    /// This reader supports Jsonc (Json with Comments).
+    /// </para>
+    /// </summary>
     public class JsonReader
     {
+        /// <summary>
+        /// Gets reader used to read text.
+        /// </summary>
         public TextReader Reader { get; }
 
+        /// <summary>
+        /// Creates reader with the specified Json text.
+        /// </summary>
+        /// <param name="text">The Json text.</param>
         public JsonReader(string text)
         {
             if (text == null) throw new ArgumentNullException(nameof(text));
@@ -16,11 +29,18 @@ namespace UGF.Json.Runtime
             Reader = new StringReader(text);
         }
 
+        /// <summary>
+        /// Creates reader with the specified text reader.
+        /// </summary>
+        /// <param name="reader">The text reader.</param>
         public JsonReader(TextReader reader)
         {
             Reader = reader ?? throw new ArgumentNullException(nameof(reader));
         }
 
+        /// <summary>
+        /// Reads and parse Json text as structured JsonValue data.
+        /// </summary>
         public IJsonValue Read()
         {
             SkipWhiteSpaceOrComment();
@@ -377,6 +397,11 @@ namespace UGF.Json.Runtime
             {
                 throw new InvalidOperationException("Reader reach end of the stream.");
             }
+        }
+
+        public override string ToString()
+        {
+            return Reader.ToString();
         }
     }
 }

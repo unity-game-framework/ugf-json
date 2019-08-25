@@ -5,21 +5,38 @@ using UGF.Json.Runtime.Values;
 
 namespace UGF.Json.Runtime
 {
+    /// <summary>
+    /// Represents writer to write any <see cref="IJsonValue"/>.
+    /// </summary>
     public class JsonWriter
     {
+        /// <summary>
+        /// Gets text writer used to write text.
+        /// </summary>
         public TextWriter Writer { get; }
 
         private readonly HashSet<object> m_references = new HashSet<object>();
 
+        /// <summary>
+        /// Creates writer with <see cref="StringWriter"/> as writer.
+        /// </summary>
         public JsonWriter() : this(new StringWriter())
         {
         }
 
+        /// <summary>
+        /// Creates write with specified text writer to use.
+        /// </summary>
+        /// <param name="writer">The text writer.</param>
         public JsonWriter(TextWriter writer)
         {
             Writer = writer;
         }
 
+        /// <summary>
+        /// Writes the specified Json value as string representation to the stream.
+        /// </summary>
+        /// <param name="value">The Json value to write.</param>
         public void Write(IJsonValue value)
         {
             if (value == null) throw new ArgumentNullException(nameof(value));

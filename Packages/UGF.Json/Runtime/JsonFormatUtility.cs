@@ -3,8 +3,15 @@ using System.IO;
 
 namespace UGF.Json.Runtime
 {
+    /// <summary>
+    /// Provides utilities to format Json text.
+    /// </summary>
     public static class JsonFormatUtility
     {
+        /// <summary>
+        /// Converts the specified Json text into compact layout.
+        /// </summary>
+        /// <param name="text">The text to convert.</param>
         public static string ToCompact(string text)
         {
             if (text == null) throw new ArgumentNullException(nameof(text));
@@ -17,6 +24,11 @@ namespace UGF.Json.Runtime
             return writer.GetStringBuilder().ToString();
         }
 
+        /// <summary>
+        /// Converts the specified Json text into compact layout.
+        /// </summary>
+        /// <param name="reader">The text reader.</param>
+        /// <param name="writer">The text writer.</param>
         public static void ToCompact(TextReader reader, TextWriter writer)
         {
             if (reader == null) throw new ArgumentNullException(nameof(reader));
@@ -115,6 +127,11 @@ namespace UGF.Json.Runtime
             }
         }
 
+        /// <summary>
+        /// Converts the specified text to readable layout.
+        /// </summary>
+        /// <param name="text">The text to convert.</param>
+        /// <param name="indent">The indent size.</param>
         public static string ToReadable(string text, int indent = 4)
         {
             if (text == null) throw new ArgumentNullException(nameof(text));
@@ -128,6 +145,12 @@ namespace UGF.Json.Runtime
             return writer.GetStringBuilder().ToString();
         }
 
+        /// <summary>
+        /// Converts the specified text to readable layout.
+        /// </summary>
+        /// <param name="reader">The text reader.</param>
+        /// <param name="writer">The text writer.</param>
+        /// <param name="indent">The indent size.</param>
         public static void ToReadable(TextReader reader, TextWriter writer, int indent = 4)
         {
             if (reader == null) throw new ArgumentNullException(nameof(reader));
@@ -281,6 +304,10 @@ namespace UGF.Json.Runtime
             writer.WriteLine();
         }
 
+        /// <summary>
+        /// Escapes the specified text.
+        /// </summary>
+        /// <param name="text">The text to escape.</param>
         public static string Escape(string text)
         {
             if (text == null) throw new ArgumentNullException(nameof(text));
@@ -293,6 +320,11 @@ namespace UGF.Json.Runtime
             return writer.GetStringBuilder().ToString();
         }
 
+        /// <summary>
+        /// Escapes the specified text.
+        /// </summary>
+        /// <param name="reader">The text reader.</param>
+        /// <param name="writer">The text writer.</param>
         public static void Escape(TextReader reader, TextWriter writer)
         {
             if (reader == null) throw new ArgumentNullException(nameof(reader));
@@ -355,6 +387,10 @@ namespace UGF.Json.Runtime
             }
         }
 
+        /// <summary>
+        /// Unescapes the specified text.
+        /// </summary>
+        /// <param name="text">The text to unescape.</param>
         public static string Unescape(string text)
         {
             if (text == null) throw new ArgumentNullException(nameof(text));
@@ -367,6 +403,11 @@ namespace UGF.Json.Runtime
             return writer.GetStringBuilder().ToString();
         }
 
+        /// <summary>
+        /// Unescapes the specified text.
+        /// </summary>
+        /// <param name="reader">The text reader.</param>
+        /// <param name="writer">The text writer.</param>
         public static void Unescape(TextReader reader, TextWriter writer)
         {
             if (reader == null) throw new ArgumentNullException(nameof(reader));
@@ -444,6 +485,10 @@ namespace UGF.Json.Runtime
             }
         }
 
+        /// <summary>
+        /// Clears comments from the specified text.
+        /// </summary>
+        /// <param name="text">The text to clear.</param>
         public static string ClearComments(string text)
         {
             if (text == null) throw new ArgumentNullException(nameof(text));
@@ -456,6 +501,11 @@ namespace UGF.Json.Runtime
             return writer.GetStringBuilder().ToString();
         }
 
+        /// <summary>
+        /// Clears comments from the specified text.
+        /// </summary>
+        /// <param name="reader">The text reader.</param>
+        /// <param name="writer">The text writer.</param>
         public static void ClearComments(TextReader reader, TextWriter writer)
         {
             if (reader == null) throw new ArgumentNullException(nameof(reader));
@@ -534,6 +584,10 @@ namespace UGF.Json.Runtime
             }
         }
 
+        /// <summary>
+        /// Skips all white spaces from the current reader position and until non-whitespace character in the stream.
+        /// </summary>
+        /// <param name="reader">The text reader.</param>
         public static void SkipWhiteSpaces(TextReader reader)
         {
             if (reader == null) throw new ArgumentNullException(nameof(reader));
@@ -544,6 +598,10 @@ namespace UGF.Json.Runtime
             }
         }
 
+        /// <summary>
+        /// Determines whether the specified character in range of '0-9' digits.
+        /// </summary>
+        /// <param name="ch">The character to check.</param>
         public static bool IsDigit(char ch)
         {
             switch (ch)
@@ -563,6 +621,13 @@ namespace UGF.Json.Runtime
             return false;
         }
 
+        /// <summary>
+        /// Parses the specified four characters as unicode.
+        /// </summary>
+        /// <param name="ch0">The character.</param>
+        /// <param name="ch1">The character.</param>
+        /// <param name="ch2">The character.</param>
+        /// <param name="ch3">The character.</param>
         public static int ParseUnicode(char ch0, char ch1, char ch2, char ch3)
         {
             return ((CharToNumber(ch0) * 16 + CharToNumber(ch1)) * 16 + CharToNumber(ch2)) * 16 + CharToNumber(ch3);

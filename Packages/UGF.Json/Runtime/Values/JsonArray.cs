@@ -2,6 +2,9 @@ using System.Collections.Generic;
 
 namespace UGF.Json.Runtime.Values
 {
+    /// <summary>
+    /// Represents Json array value.
+    /// </summary>
     public class JsonArray : List<IJsonValue>, IJsonValue
     {
         public JsonValueType Type { get; } = JsonValueType.Array;
