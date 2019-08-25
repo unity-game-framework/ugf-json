@@ -1,0 +1,18 @@
+{
+    "name": "UGF.Json.Runtime.Tests",
+    "references": [
+        "GUID:e1bed473bf9ce0148b474ce0fa208dcd"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": []
+}

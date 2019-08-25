@@ -4,7 +4,7 @@ UGF.Json
 
 ## Info
 
-- **Version**: `0.0.0-preview`
+- **Version**: `0.1.0-preview`
 - **Unity Version**: `2019.2.0`
 - **Api Compatibility Level**: `.NET Standard 2.0`
 
@@ -19,11 +19,11 @@ UGF.Json
 ### Registries
 
 - [Stable][2] (N/A)
-- [Develop][3] (N/A)
+- [Develop][3]
 
 ## Description
 
-No description.
+Provides Json parsing into structured data.
 
 ## How to Install
 
