@@ -10,13 +10,21 @@ namespace UGF.Json.Runtime.Tests
         private readonly string m_escaped = "\\\" / \\\\ \\b \\f \\n \\r \\t a";
         private readonly string m_escaped2 = "\\\" / \\\\ \\b \\f \\n \\r \\t \\u0061";
         private string m_compact;
+        private string m_compact_c1;
         private string m_readable;
+        private string m_readable_c1;
+        private string m_readable_c2;
+        private string m_readable_c3;
 
         [SetUp]
         public void Setup()
         {
             m_compact = Resources.Load<TextAsset>("compact").text;
+            m_compact_c1 = Resources.Load<TextAsset>("compact_c1").text;
             m_readable = Resources.Load<TextAsset>("readable").text;
+            m_readable_c1 = Resources.Load<TextAsset>("readable_c1").text;
+            m_readable_c2 = Resources.Load<TextAsset>("readable_c2").text;
+            m_readable_c3 = Resources.Load<TextAsset>("readable_c3").text;
         }
 
         [Test]
@@ -24,9 +32,11 @@ namespace UGF.Json.Runtime.Tests
         {
             string result0 = JsonFormatUtility.ToCompact(m_readable);
             string result1 = JsonFormatUtility.ToCompact(m_compact);
+            string result2 = JsonFormatUtility.ToCompact(m_readable_c1);
 
             Assert.AreEqual(m_compact, result0);
             Assert.AreEqual(m_compact, result1);
+            Assert.AreEqual(m_compact_c1, result2);
         }
 
         [Test]
@@ -34,9 +44,13 @@ namespace UGF.Json.Runtime.Tests
         {
             string result0 = JsonFormatUtility.ToReadable(m_compact);
             string result1 = JsonFormatUtility.ToReadable(m_readable);
+            string result2 = JsonFormatUtility.ToReadable(m_compact_c1);
+            string result3 = JsonFormatUtility.ToReadable(m_readable_c1);
 
             Assert.AreEqual(m_readable, result0);
             Assert.AreEqual(m_readable, result1);
+            Assert.AreEqual(m_readable_c2, result2);
+            Assert.AreEqual(m_readable_c1, result3);
         }
 
         [Test]
@@ -59,6 +73,20 @@ namespace UGF.Json.Runtime.Tests
             Assert.AreEqual(m_unescaped, result0);
             Assert.AreEqual("http://placehold.it/32x32", result1);
             Assert.AreEqual(m_unescaped, result2);
+        }
+
+        [Test]
+        public void ClearComments()
+        {
+            string result0 = JsonFormatUtility.ClearComments(m_readable_c1);
+            string result1 = JsonFormatUtility.ClearComments(m_readable_c2);
+            string result2 = JsonFormatUtility.ClearComments(m_readable_c3);
+            string result3 = JsonFormatUtility.ClearComments(m_compact_c1);
+
+            Assert.AreEqual(m_readable, result0);
+            Assert.AreEqual(m_readable, result1);
+            Assert.AreEqual(m_readable, result2);
+            Assert.AreEqual(m_compact, result3);
         }
 
         [Test]

@@ -23,7 +23,14 @@ namespace UGF.Json.Runtime
 
         public IJsonValue Read()
         {
+            SkipWhiteSpaceOrComment();
+
             char ch = Peek();
+
+            if (ch == '/')
+            {
+                SkipComment();
+            }
 
             switch (ch)
             {
@@ -55,7 +62,7 @@ namespace UGF.Json.Runtime
 
             ReadAndValidate('{');
 
-            JsonFormatUtility.SkipWhiteSpaces(Reader);
+            SkipWhiteSpaceOrComment();
 
             if (Peek() == '}')
             {
@@ -65,19 +72,19 @@ namespace UGF.Json.Runtime
             {
                 while (true)
                 {
-                    JsonFormatUtility.SkipWhiteSpaces(Reader);
+                    SkipWhiteSpaceOrComment();
 
                     string key = ReadString().Raw;
 
-                    JsonFormatUtility.SkipWhiteSpaces(Reader);
+                    SkipWhiteSpaceOrComment();
 
                     ReadNext();
 
-                    JsonFormatUtility.SkipWhiteSpaces(Reader);
+                    SkipWhiteSpaceOrComment();
 
                     value.Add(key, Read());
 
-                    JsonFormatUtility.SkipWhiteSpaces(Reader);
+                    SkipWhiteSpaceOrComment();
 
                     if (ReadNext() == '}')
                     {
@@ -103,11 +110,11 @@ namespace UGF.Json.Runtime
             {
                 while (true)
                 {
-                    JsonFormatUtility.SkipWhiteSpaces(Reader);
+                    SkipWhiteSpaceOrComment();
 
                     value.Add(Read());
 
-                    JsonFormatUtility.SkipWhiteSpaces(Reader);
+                    SkipWhiteSpaceOrComment();
 
                     if (ReadNext() == ']')
                     {
@@ -268,11 +275,76 @@ namespace UGF.Json.Runtime
             throw new JsonUnexpectedSymbolException("'\"' at the end of the string", (char)Reader.Peek());
         }
 
+        private void SkipWhiteSpaceOrComment()
+        {
+            char ch = Peek();
+
+            while (CanRead() && (char.IsWhiteSpace(ch) || ch == '/'))
+            {
+                if (char.IsWhiteSpace(ch))
+                {
+                    JsonFormatUtility.SkipWhiteSpaces(Reader);
+                }
+
+                ch = Peek();
+
+                if (ch == '/')
+                {
+                    SkipComment();
+                }
+
+                ch = Peek();
+            }
+        }
+
+        private void SkipComment()
+        {
+            ReadAndValidate('/');
+
+            char ch = ReadNext();
+
+            if (ch == '/')
+            {
+                while (ch != '\r' && ch != '\n')
+                {
+                    ReadNext();
+
+                    ch = Peek();
+                }
+                return;
+            }
+
+            if (ch == '*')
+            {
+                while (CanRead())
+                {
+                    ch = ReadNext();
+
+                    if (ch == '*')
+                    {
+                        ch = ReadNext();
+
+                        if (ch == '/')
+                        {
+                            return;
+                        }
+                    }
+                }
+
+                if (!CanRead())
+                {
+                    throw new Exception("Reader reach end of the stream during comments read.");
+                }
+            }
+
+            throw new JsonUnexpectedSymbolException("'/' or '*' after starting comment", ch);
+        }
+
         private bool CanRead()
         {
             CheckStreamEnd();
 
-            return true;
+            return Reader.Peek() != -1;
         }
 
         private char Peek()

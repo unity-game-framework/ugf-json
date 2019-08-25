@@ -43,6 +43,60 @@ namespace UGF.Json.Runtime
                         while (ch != '"');
                         break;
                     }
+                    case '/':
+                    {
+                        writer.Write(ch);
+
+                        ch = (char)reader.Read();
+
+                        if (ch == '/')
+                        {
+                            writer.Write('*');
+
+                            while (ch != '\r' && ch != '\n')
+                            {
+                                writer.Write((char)reader.Read());
+
+                                ch = (char)reader.Peek();
+                            }
+
+                            writer.Write('*');
+                            writer.Write('/');
+                        }
+                        else if (ch == '*')
+                        {
+                            writer.Write(ch);
+
+                            while (reader.Peek() != -1)
+                            {
+                                ch = (char)reader.Read();
+
+                                writer.Write(ch);
+
+                                if (ch == '*')
+                                {
+                                    ch = (char)reader.Read();
+
+                                    writer.Write(ch);
+
+                                    if (ch == '/')
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if (reader.Peek() == -1)
+                            {
+                                throw new Exception("Reader reach end of the stream during comments read.");
+                            }
+                        }
+                        else
+                        {
+                            throw new JsonUnexpectedSymbolException("'/' or '*' after starting comment", ch);
+                        }
+                        break;
+                    }
                     case ' ':
                     case '\b':
                     case '\f':
@@ -141,6 +195,70 @@ namespace UGF.Json.Runtime
                     {
                         writer.Write(ch);
                         writer.Write(' ');
+                        break;
+                    }
+                    case '/':
+                    {
+                        writer.Write(ch);
+
+                        ch = (char)reader.Read();
+
+                        if (ch == '/')
+                        {
+                            writer.Write(ch);
+
+                            while (ch != '\r' && ch != '\n')
+                            {
+                                writer.Write((char)reader.Read());
+
+                                ch = (char)reader.Peek();
+                            }
+
+                            writer.WriteLine();
+
+                            for (int i = 0, count = indent * depth; i < count; i++)
+                            {
+                                writer.Write(' ');
+                            }
+                        }
+                        else if (ch == '*')
+                        {
+                            writer.Write(ch);
+
+                            while (reader.Peek() != -1)
+                            {
+                                ch = (char)reader.Read();
+
+                                writer.Write(ch);
+
+                                if (ch == '*')
+                                {
+                                    ch = (char)reader.Read();
+
+                                    writer.Write(ch);
+
+                                    if (ch == '/')
+                                    {
+                                        writer.WriteLine();
+                                        break;
+                                    }
+                                }
+                            }
+
+                            for (int i = 0, count = indent * depth; i < count; i++)
+                            {
+                                writer.Write(' ');
+                            }
+
+                            if (reader.Peek() == -1)
+                            {
+                                throw new Exception("Reader reach end of the stream during comments read.");
+                            }
+                        }
+                        else
+                        {
+                            throw new JsonUnexpectedSymbolException("'/' or '*' after starting comment", ch);
+                        }
                         break;
                     }
                     case ' ':
@@ -326,8 +444,100 @@ namespace UGF.Json.Runtime
             }
         }
 
+        public static string ClearComments(string text)
+        {
+            if (text == null) throw new ArgumentNullException(nameof(text));
+
+            var reader = new StringReader(text);
+            var writer = new StringWriter();
+
+            ClearComments(reader, writer);
+
+            return writer.GetStringBuilder().ToString();
+        }
+
+        public static void ClearComments(TextReader reader, TextWriter writer)
+        {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (writer == null) throw new ArgumentNullException(nameof(writer));
+
+            while (reader.Peek() != -1)
+            {
+                char ch = (char)reader.Read();
+
+                switch (ch)
+                {
+                    case '"':
+                    {
+                        writer.Write(ch);
+
+                        do
+                        {
+                            ch = (char)reader.Read();
+
+                            writer.Write(ch);
+                        }
+                        while (ch != '"');
+                        break;
+                    }
+                    case '/':
+                    {
+                        ch = (char)reader.Read();
+
+                        if (ch == '/')
+                        {
+                            while (ch != '\r' && ch != '\n')
+                            {
+                                reader.Read();
+
+                                ch = (char)reader.Peek();
+                            }
+
+                            SkipWhiteSpaces(reader);
+                        }
+                        else if (ch == '*')
+                        {
+                            while (reader.Peek() != -1)
+                            {
+                                ch = (char)reader.Read();
+
+                                if (ch == '*')
+                                {
+                                    ch = (char)reader.Read();
+
+                                    if (ch == '/')
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+
+                            SkipWhiteSpaces(reader);
+
+                            if (reader.Peek() == -1)
+                            {
+                                throw new Exception("Reader reach end of the stream during comments read.");
+                            }
+                        }
+                        else
+                        {
+                            throw new JsonUnexpectedSymbolException("'/' or '*' after starting comment", ch);
+                        }
+                        break;
+                    }
+                    default:
+                    {
+                        writer.Write(ch);
+                        break;
+                    }
+                }
+            }
+        }
+
         public static void SkipWhiteSpaces(TextReader reader)
         {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+
             while (reader.Peek() != -1 && char.IsWhiteSpace((char)reader.Peek()))
             {
                 reader.Read();
