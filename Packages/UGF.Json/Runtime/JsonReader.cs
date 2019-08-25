@@ -133,7 +133,7 @@ namespace UGF.Json.Runtime
             ReadAndValidate('l');
             ReadAndValidate('l');
 
-            return new JsonValue(JsonValueType.Null, "null");
+            return JsonValue.Null;
         }
 
         private JsonValue ReadTrue()
@@ -143,7 +143,7 @@ namespace UGF.Json.Runtime
             ReadAndValidate('u');
             ReadAndValidate('e');
 
-            return new JsonValue(JsonValueType.Boolean, "true");
+            return JsonValue.True;
         }
 
         private JsonValue ReadFalse()
@@ -154,7 +154,7 @@ namespace UGF.Json.Runtime
             ReadAndValidate('s');
             ReadAndValidate('e');
 
-            return new JsonValue(JsonValueType.Boolean, "false");
+            return JsonValue.False;
         }
 
         private JsonValue ReadNumber()
