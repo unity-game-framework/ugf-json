@@ -1,0 +1,61 @@
+{
+    "_id": "5b267c48e0e3637be6b90797",
+    "index": 0,
+    "number1": 0,
+    "number2": -0,
+    "number3": 0.0,
+    "number4": 0.0e-1,
+    "guid": "e4f2e36c-0a4f-4a29-b235-3f93feb82bcc",
+    "isActive": true,
+    "balance": "$2,411.91",
+    "picture": "http://placehold.it/32x32",
+    "age": 22,
+    "eyeColor": "brown",
+    "name": {
+        "first": "Tran",
+        "last": "Lynch"
+    },
+    "company": "EXOZENT",
+    "email": "tran.lynch@exozent.com",
+    "phone": "+1 (891) 440-3253",
+    "address": "579 Knight Court, Makena, Guam, 9497",
+    "about": "Officia consectetur labore esse ipsum sit laboris do eu consequat irure. Excepteur irure esse ad enim irure. Commodo eiusmod eiusmod minim ea occaecat aliqua. Reprehenderit officia consequat labore tempor do deserunt labore cupidatat labore sit. Non reprehenderit sint fugiat eiusmod est mollit dolore ipsum fugiat nulla ipsum ad. Reprehenderit officia sit laborum ea minim mollit fugiat deserunt consequat fugiat. Fugiat excepteur pariatur proident est ipsum eu elit ad aliqua eu.",
+    "registered": "Monday, May 7, 2018 10:04 PM",
+    "latitude": "-61.067691",
+    "longitude": "35.23741",
+    "tags": [
+        "consequat",
+        "non",
+        "id",
+        "voluptate",
+        "do"
+    ],
+    "range": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+    ],
+    "friends": [
+        {
+            "id": 0.05,
+            "name": "Felicia Whitney"
+        },
+        {
+            "id": 1,
+            "name": "Vasquez Wyatt"
+        },
+        {
+            "id": 2,
+            "name": "Rich Clarke"
+        }
+    ],
+    "greeting": "Hello, Tran! You have 10 unread messages.",
+    "favoriteFruit": "strawberry"
+}
