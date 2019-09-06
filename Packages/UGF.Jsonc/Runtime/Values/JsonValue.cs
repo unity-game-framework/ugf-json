@@ -1,7 +1,7 @@
 using System;
 using System.Globalization;
 
-namespace UGF.Json.Runtime.Values
+namespace UGF.Jsonc.Runtime.Values
 {
     /// <summary>
     /// Represents a generic value, that can be Null, Boolean or Number.

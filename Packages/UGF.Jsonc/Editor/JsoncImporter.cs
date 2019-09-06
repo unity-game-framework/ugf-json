@@ -2,7 +2,7 @@ using System.IO;
 using UnityEditor.Experimental.AssetImporters;
 using UnityEngine;
 
-namespace UGF.Json.Editor
+namespace UGF.Jsonc.Editor
 {
     /// <summary>
     /// Represents importer to support '.jsonc' (Json with Comments) extension.

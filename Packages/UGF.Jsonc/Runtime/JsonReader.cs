@@ -1,9 +1,9 @@
 using System;
 using System.IO;
 using System.Text;
-using UGF.Json.Runtime.Values;
+using UGF.Jsonc.Runtime.Values;
 
-namespace UGF.Json.Runtime
+namespace UGF.Jsonc.Runtime
 {
     /// <summary>
     /// Represents reader to parse Json text to structured data.

@@ -1,7 +1,7 @@
 using System;
-using UGF.Json.Runtime.Values;
+using UGF.Jsonc.Runtime.Values;
 
-namespace UGF.Json.Runtime
+namespace UGF.Jsonc.Runtime
 {
     /// <summary>
     /// Represents error that occur when unexpected Json value specified.

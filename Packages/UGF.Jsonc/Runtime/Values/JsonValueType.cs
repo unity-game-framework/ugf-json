@@ -1,4 +1,4 @@
-namespace UGF.Json.Runtime.Values
+namespace UGF.Jsonc.Runtime.Values
 {
     /// <summary>
     /// Represents type of the Json value.
