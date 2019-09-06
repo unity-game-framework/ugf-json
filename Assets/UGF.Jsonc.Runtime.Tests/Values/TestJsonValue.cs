@@ -1,7 +1,7 @@
 using NUnit.Framework;
-using UGF.Json.Runtime.Values;
+using UGF.Jsonc.Runtime.Values;
 
-namespace UGF.Json.Runtime.Tests.Values
+namespace UGF.Jsonc.Runtime.Tests.Values
 {
     public class TestJsonValue
     {

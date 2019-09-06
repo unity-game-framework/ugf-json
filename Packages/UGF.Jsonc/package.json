@@ -1,6 +1,6 @@
 {
-    "name": "com.ugf.json",
-    "displayName": "UGF.Json",
+    "name": "com.ugf.jsonc",
+    "displayName": "UGF.Jsonc",
     "version": "0.1.0-preview",
     "unity": "2019.2",
     "description": "Provides Json parsing into structured data.",

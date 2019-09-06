@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace UGF.Json.Runtime.Values
+namespace UGF.Jsonc.Runtime.Values
 {
     /// <summary>
     /// Represents Json object value.

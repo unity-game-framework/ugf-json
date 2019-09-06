@@ -1,6 +1,6 @@
 using System;
 
-namespace UGF.Json.Runtime
+namespace UGF.Jsonc.Runtime
 {
     /// <summary>
     /// Represents error that occur when unexpected raw value specified.

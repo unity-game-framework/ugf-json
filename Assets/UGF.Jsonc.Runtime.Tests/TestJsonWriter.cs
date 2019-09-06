@@ -1,9 +1,9 @@
 using System;
 using NUnit.Framework;
-using UGF.Json.Runtime.Values;
+using UGF.Jsonc.Runtime.Values;
 using UnityEngine;
 
-namespace UGF.Json.Runtime.Tests
+namespace UGF.Jsonc.Runtime.Tests
 {
     public class TestJsonWriter
     {

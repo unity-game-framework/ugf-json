@@ -1,6 +1,6 @@
-# com.ugf.json
+# com.ugf.jsonc
 
-UGF.Json
+UGF.Jsonc
 
 ## Info
 
@@ -33,6 +33,6 @@ Read about how to install any packages from the `Unity Game Framework` registry:
 > Unity Game Framework | Copyright 2019
 
 [1]: changelog.md
-[2]: https://bintray.com/unity-game-framework/stable/com.ugf.json
-[3]: https://bintray.com/unity-game-framework/dev/com.ugf.json
+[2]: https://bintray.com/unity-game-framework/stable/com.ugf.jsonc
+[3]: https://bintray.com/unity-game-framework/dev/com.ugf.jsonc
 [4]: https://github.com/unity-game-framework/ugf-documentation/wiki/Install-Package

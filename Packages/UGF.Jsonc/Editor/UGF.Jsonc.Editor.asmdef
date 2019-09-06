@@ -1,7 +1,6 @@
 {
-    "name": "UGF.Json.Editor.Tests",
+    "name": "UGF.Jsonc.Editor",
     "references": [
-        "GUID:8672b157fd8e86441adc5b67eb23e7c5",
         "GUID:e1bed473bf9ce0148b474ce0fa208dcd"
     ],
     "includePlatforms": [
@@ -12,8 +11,6 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [
-        "UNITY_INCLUDE_TESTS"
-    ],
+    "defineConstraints": [],
     "versionDefines": []
 }
