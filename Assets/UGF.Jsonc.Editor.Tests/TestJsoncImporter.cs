@@ -1,4 +1,4 @@
-﻿namespace UGF.Json.Editor.Tests
+﻿namespace UGF.Jsonc.Editor.Tests
 {
     public class TestJsoncImporter
     {

@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace UGF.Json.Runtime
+namespace UGF.Jsonc.Runtime
 {
     /// <summary>
     /// Provides utilities to format Json text.

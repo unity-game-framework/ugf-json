@@ -2,7 +2,7 @@ using System.IO;
 using NUnit.Framework;
 using UnityEngine;
 
-namespace UGF.Json.Runtime.Tests
+namespace UGF.Jsonc.Runtime.Tests
 {
     public class TestJsonFormatUtility
     {

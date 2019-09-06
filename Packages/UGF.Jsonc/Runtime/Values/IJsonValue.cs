@@ -1,4 +1,4 @@
-namespace UGF.Json.Runtime.Values
+namespace UGF.Jsonc.Runtime.Values
 {
     /// <summary>
     /// Represents a Json value that can be Null, Boolean, Number, Object or Array.

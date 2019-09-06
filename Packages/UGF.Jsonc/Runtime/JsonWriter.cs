@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using UGF.Json.Runtime.Values;
+using UGF.Jsonc.Runtime.Values;
 
-namespace UGF.Json.Runtime
+namespace UGF.Jsonc.Runtime
 {
     /// <summary>
     /// Represents writer to write any <see cref="IJsonValue"/>.
