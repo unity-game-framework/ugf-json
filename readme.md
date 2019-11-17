@@ -4,8 +4,8 @@ UGF.Jsonc
 
 ## Info
 
-- **Version**: `0.1.0-preview`
-- **Unity Version**: `2019.2.0`
+- **Version**: `0.2.0-preview`
+- **Unity Version**: `2019.3.0`
 - **Api Compatibility Level**: `.NET Standard 2.0`
 
 ### Dependencies
